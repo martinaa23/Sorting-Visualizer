@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import './SortingVisualizer.css';
 
 class SortingVisualizer extends Component {
     constructor(props){
         super(props);
         this.state = {
             // Array to be sorted
-            array: []
+            array: [],
         };
     }
 
@@ -25,30 +26,42 @@ class SortingVisualizer extends Component {
         this.setState({array})
     }
 
-    bubbleSort(){
+    bubbleSort(array){
         // Implement bublesorting algorithm
+        let arrayLength = array.length;
+        for(let i = 0; i < arrayLength - 1; i++){
+            let swapped = false;
+            for(let j = 0; j < arrayLength - i - 1; j++){
+                if(array[j] > array[j + 1]){
+                    [array[j], array[j + 1]] = [array[j + 1], array[j]];
+                    swapped = true;
+                }
+            }
+            if(swapped == false){
+                break;
+            }
+        }
+        this.setState({array})  
     }
 
     render(){
         const { array } = this.state;
 
         return (
-            <div className="sorting-visualizer">
+            <div className="array-containter">
                 {array.map((value, idx) => (
                 <div
                     className="array-bar"
                     key={idx}
-                    style={{height: '${value}px'}}
-                ></div>
+                    style={{height: `${value}px`}}
+                    ></div>
                 ))}
                 <button onClick={() => this.resetArray()}>Generate New Array</button>
-                <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+                <button onClick={() => this.bubbleSort(array)}>Bubble Sort</button>
                 {/*Add more sorting algorithms*/}
             </div>
         );
     }
-
-
 }
 
 // Helper function to generate random integers within a range

@@ -1,0 +1,12 @@
+.array-containter{
+    position: absolute;
+    left: 100px;
+}
+.array-bar{ 
+    transition: height 0.3s ease;
+    width: 2px;
+    background-color: rebeccapurple;
+    display: inline-block;
+    margin: 0 1px;
+} 
+
