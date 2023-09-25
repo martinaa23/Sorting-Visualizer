@@ -7,6 +7,7 @@ class SortingVisualizer extends Component {
         this.state = {
             // Array to be sorted
             array: [],
+            highlightedIndices: [], 
             sorting: false,
         };
     }
@@ -20,7 +21,7 @@ class SortingVisualizer extends Component {
     resetArray(){
         const array = []
 
-        for(let i = 0; i < 100; i++){
+        for(let i = 0; i < 50; i++){
             // Generate random values 
             array.push(randomIntFromInterval(5, 500)); 
         }
@@ -29,35 +30,53 @@ class SortingVisualizer extends Component {
 
     // Implement bublesorting algorithm
     async bubbleSort(array){
+        let highlightedIndices = [];
         let arrayLength = array.length;
+        this.setState({sorting: true});
+
         for(let i = 0; i < arrayLength - 1; i++){
             for(let j = 0; j < arrayLength - i - 1; j++){
                 if(array[j] > array[j + 1]){
                     [array[j], array[j + 1]] = [array[j + 1], array[j]];
+                    highlightedIndices = [j, j + 1];
                 }
-                this.setState({array: [...array]});
 
-                await new Promise((resolve) => setTimeout(resolve, 1));
+
+                this.setState({
+                    highlightedIndices: [...highlightedIndices],
+                    array: [...array]
+                
+                });
+                
+                await new Promise((resolve) => setTimeout(resolve, 100));
             }
         }
-        this.setState({array})  
+        this.setState({
+            highlightedIndices: [],
+            array: [...array]  
+        });
+        this.setState({sorting: false})
     }
 
+    
+
     render(){
-        const { array } = this.state;
+        const { array, highlightedIndices, sorting } = this.state;
 
         return (
-            <div className="array-containter">
+            <div className="array-container">
                 {array.map((value, idx) => (
                 <div
-                    className="array-bar"
+                    className={`array-bar ${highlightedIndices.includes(idx) ? 'highlighted' : ''}`} 
                     key={idx}
                     style={{height: `${value}px`}}>
                     </div>
                 ))}
+                <div className={sorting ? 'disabled' : ''}>
                 <button onClick={() => this.resetArray()}>Generate New Array</button>
                 <button onClick={() => this.bubbleSort(array)}>Bubble Sort</button>
                 {/*Add more sorting algorithms*/}
+                </div>
             </div>
         );
     }
