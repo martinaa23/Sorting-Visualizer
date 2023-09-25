@@ -7,6 +7,7 @@ class SortingVisualizer extends Component {
         this.state = {
             // Array to be sorted
             array: [],
+            sorting: false,
         };
     }
 
@@ -19,21 +20,24 @@ class SortingVisualizer extends Component {
     resetArray(){
         const array = []
 
-        for(let i = 0; i < 370; i++){
+        for(let i = 0; i < 100; i++){
             // Generate random values 
             array.push(randomIntFromInterval(5, 500)); 
         }
         this.setState({array})
     }
 
-    bubbleSort(array){
-        // Implement bublesorting algorithm
+    // Implement bublesorting algorithm
+    async bubbleSort(array){
         let arrayLength = array.length;
         for(let i = 0; i < arrayLength - 1; i++){
             for(let j = 0; j < arrayLength - i - 1; j++){
                 if(array[j] > array[j + 1]){
                     [array[j], array[j + 1]] = [array[j + 1], array[j]];
                 }
+                this.setState({array: [...array]});
+
+                await new Promise((resolve) => setTimeout(resolve, 1));
             }
         }
         this.setState({array})  
@@ -48,8 +52,8 @@ class SortingVisualizer extends Component {
                 <div
                     className="array-bar"
                     key={idx}
-                    style={{height: `${value}px`}}
-                    ></div>
+                    style={{height: `${value}px`}}>
+                    </div>
                 ))}
                 <button onClick={() => this.resetArray()}>Generate New Array</button>
                 <button onClick={() => this.bubbleSort(array)}>Bubble Sort</button>
