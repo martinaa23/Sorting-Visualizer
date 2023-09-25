@@ -1,6 +1,8 @@
 .array-containter{
-    position: absolute;
-    left: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 .array-bar{ 
     transition: height 0.3s ease;

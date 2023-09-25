@@ -19,7 +19,7 @@ class SortingVisualizer extends Component {
     resetArray(){
         const array = []
 
-        for(let i = 0; i < 100; i++){
+        for(let i = 0; i < 370; i++){
             // Generate random values 
             array.push(randomIntFromInterval(5, 500)); 
         }
@@ -30,15 +30,10 @@ class SortingVisualizer extends Component {
         // Implement bublesorting algorithm
         let arrayLength = array.length;
         for(let i = 0; i < arrayLength - 1; i++){
-            let swapped = false;
             for(let j = 0; j < arrayLength - i - 1; j++){
                 if(array[j] > array[j + 1]){
                     [array[j], array[j + 1]] = [array[j + 1], array[j]];
-                    swapped = true;
                 }
-            }
-            if(swapped == false){
-                break;
             }
         }
         this.setState({array})  
