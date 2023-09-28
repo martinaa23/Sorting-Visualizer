@@ -1,18 +1,14 @@
 .array-container{
-    position: absolute;
-    top: 100px; left: 0; right: 0; bottom: 0;
-  
-    
+    margin: 0 auto;
     
 }
 .array-bar{ 
-    transition: height 1s ease;
-    width: 12px;
-    background-color: purple;
+    width: 8px;
+    background-color: red;
     display: inline-block;
-    margin: 0 1px;
+    margin: 0 1.5px;
 } 
-
+/*
 .highlighted {
     background-color: yellow;
     transition: background-color 0.15s step-end;
@@ -21,4 +17,4 @@
 .disabled {
     pointer-events: none;
     opacity: 0.5;
-}
+} */

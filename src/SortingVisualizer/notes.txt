@@ -1,0 +1,53 @@
+render function
+render(){
+        const { array, highlightedIndices, sorting } = this.state;
+
+        return (
+            <div className="array-container">
+                {this.state.array.map((value, idx) => (
+                <div
+                    className={`array-bar ${highlightedIndices.includes(idx) ? 'highlighted' : ''}`} 
+                    key={idx}
+                    // style={{height: `${value}px`}}>
+                    style={{height: `${(value/500) * 100}%`}}>
+                    </div>
+                ))}
+                <div className={`button-container ${sorting ? 'disabled' : ''}`}>
+                <button onClick={() => this.resetArray()}>Generate New Array</button>
+                <button onClick={() => this.bubbleSort(array)}>Bubble Sort</button>
+                <button onClick={() => this.mergeSort(array)}>Merge Sort </button>
+                {/*Add more sorting algorithms*/}
+                </div>
+            </div>
+        );
+    }
+
+    // Implement bubble sorting algorithm
+    async bubbleSort(array){
+        let highlightedIndices = [];
+        let arrayLength = array.length;
+        this.setState({sorting: true});
+
+        for(let i = 0; i < arrayLength - 1; i++){
+            for(let j = 0; j < arrayLength - i - 1; j++){
+                if(array[j] > array[j + 1]){
+                    [array[j], array[j + 1]] = [array[j + 1], array[j]];
+                    highlightedIndices = [j, j + 1];
+                }
+
+
+                this.setState({
+                    highlightedIndices: [...highlightedIndices],
+                    array: [...array]
+                
+                });
+                
+                await new Promise((resolve) => setTimeout(resolve, 100));
+            }
+        }
+        this.setState({
+            highlightedIndices: [],
+            array: [...array]  
+        });
+        this.setState({sorting: false})
+    }
