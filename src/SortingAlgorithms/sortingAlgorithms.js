@@ -7,6 +7,9 @@ export const bubbleSort = array => {
         for(let j = 0; j < arrayLength - i - 1; j++){
             if(array[j] > array[j + 1]){
                 [array[j], array[j + 1]] = [array[j + 1], array[j]];
+            } else {
+                animations.push([k, arrayCopy[j]]);
+                array[k++] = arrayCopy[i++];
             }    
         }
     }

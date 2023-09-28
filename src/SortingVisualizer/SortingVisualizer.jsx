@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import './SortingVisualizer.css';
 import * as sortingAlgorithms from '../SortingAlgorithms/sortingAlgorithms';
+import { wait } from "@testing-library/user-event/dist/utils";
 
+const NUMBER_OF_ARRAY_BARS = 100;
 
 class SortingVisualizer extends Component {
     constructor(props){
@@ -22,7 +24,7 @@ class SortingVisualizer extends Component {
 
     resetArray(){
         const array = []
-        for(let i = 0; i < 100; i++){
+        for(let i = 0; i < NUMBER_OF_ARRAY_BARS; i++){
             // Generate random values 
             array.push(randomIntFromInterval(5, 730)); 
         }
@@ -30,10 +32,21 @@ class SortingVisualizer extends Component {
     }
 
 
-    bubbleSort(){
+    async bubbleSort(){   
+        const sortedArray = await sortingAlgorithms.bubbleSort([...this.state.array]);
+        for(let i = 0; i < sortedArray.length; i++){
+            setTimeout(() => {
+                this.setState({array: sortedArray.slice(0, i + 1)});
+            }, i * 100);
+        }
+
         const javascriptSortedArray = this.state.array.slice().sort((a, b) => a - b);
-        const sortedArray = sortingAlgorithms.bubbleSort(this.state.array);
-        console.log(arraysAreEqual(javascriptSortedArray, sortedArray));
+        // const sortedArray = sortingAlgorithms.bubbleSort(this.state.array);
+
+
+
+
+        // console.log(arraysAreEqual(javascriptSortedArray, sortedArray));
     }
 
     testSortingAlgorithms(){
@@ -83,6 +96,18 @@ function arraysAreEqual (arrayOne, arrayTwo) {
     
     return true;
 }
+
+function swap(array, a, b){
+    return [array[a], array[b]] =[array[b], array[a]]
+}
+
+const Wait =(t,f) => new Promise(() => setTimeout(f,t))
+
+async function Test(){
+     Wait(1000, ()=> console.log("Test ran"))
+}
+
+Test()
 
 export default SortingVisualizer;
 
