@@ -13,8 +13,8 @@
     background-color: yellow;
     transition: background-color 0.5s;
 }
-/*
+
 .disabled {
     pointer-events: none;
     opacity: 0.5;
-} */
+} 

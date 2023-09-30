@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import './SortingVisualizer.css';
-import * as sortingAlgorithms from '../SortingAlgorithms/sortingAlgorithms';
+import { bubbleSort } from '../Algorithms/bubbleSort';
+import { quickSort } from "../Algorithms/quickSort";
 
 
 const NUMBER_OF_ARRAY_BARS = 100;
@@ -33,31 +34,34 @@ class SortingVisualizer extends Component {
     }
 
 
-    bubbleSort(){   
-        const animations = sortingAlgorithms.bubbleSort([...this.state.array]);
-        let i = 0;
-        const sortingInterval = setInterval(() => {
-            if(i >= animations.length){
-                clearInterval(sortingInterval);
-                return;
-            }
+    async bubbleSort(){
+        // const animations = bubbleSort([...this.state.array]);
+        // this.setState({sorting: true});  
+        // let i = 0;
+        // const animateSort = () => {
+        //     if(i >= animations.length){
+        //         this.setState({sorting: false, array: animations[animations.length - 1]});
+        //         return;
+        //     }
 
-            const [firstIdx, secondIdx] = animations[i];
-            const newArray = [...this.state.array];
-            const temp = newArray[firstIdx];
-            newArray[firstIdx] = newArray[secondIdx];
-            newArray[secondIdx] = temp;
+        //     const [firstIdx, secondIdx] = animations[i];
+        //     const newArray = [...this.state.array];
+        //     const temp = newArray[firstIdx];
+        //     newArray[firstIdx] = newArray[secondIdx];
+        //     newArray[secondIdx] = temp;
 
-            this.setState({array: newArray, swapIndices: [firstIdx, secondIdx]})
-            i++;
-        }, ANIMATION_SPEED);
+        //     this.setState({array: newArray, swapIndices: [firstIdx, secondIdx]})
+        //     i++;
+        //     setTimeout(animateSort, ANIMATION_SPEED);
+        // };
 
-       
-
-        const javascriptSortedArray = this.state.array.slice().sort((a, b) => a - b);
-        // const sortedArray = sortingAlgorithms.bubbleSort(this.state.array);
-        // console.log(arraysAreEqual(javascriptSortedArray, sortedArray));
+        // animateSort();
     }
+
+    quickSort(){
+
+    }
+
 
     testSortingAlgorithms(){
         for(let i = 0; i < 100; i++){
@@ -67,13 +71,14 @@ class SortingVisualizer extends Component {
                 array.push(randomIntFromInterval(-1000, 1000));
             }
             const javascriptSortedArray = array.slice().sort((a, b) => a - b);
-            const sortedArray = sortingAlgorithms.bubbleSort(array.slice());
+            const sortedArray = quickSort([...array]);
+
             console.log(arraysAreEqual(javascriptSortedArray, sortedArray));
         }
     }   
 
     render(){
-        const { array, swapIndices } = this.state;
+        const { array, swapIndices, sorting } = this.state;
 
         return (
             <div className="array-container">
@@ -83,9 +88,12 @@ class SortingVisualizer extends Component {
                     key={idx}
                     style={{height: `${values}px`}}></div>
             ))}
-            <button onClick={() => this.resetArray()}>Generate New Array</button>
-            <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-            <button onClick={() => this.testSortingAlgorithms()}>Test Sorting Algorithms</button>
+                <div className={`button-container ${sorting ? 'disabled' : ''}`}>
+                <button onClick={() => this.resetArray()}>Generate New Array</button>
+                <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+                <button onclick={() => this.quickSort()}>Quick Sort</button>
+                <button onClick={() => this.testSortingAlgorithms()}>Test Sorting Algorithms</button>
+                </div>
             </div>
         );   
     }
