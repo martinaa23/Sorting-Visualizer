@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import './SortingVisualizer.css';
 import * as sortingAlgorithms from '../SortingAlgorithms/sortingAlgorithms';
-import { wait } from "@testing-library/user-event/dist/utils";
+
 
 const NUMBER_OF_ARRAY_BARS = 100;
+const ANIMATION_SPEED = 50;
 
 class SortingVisualizer extends Component {
     constructor(props){
@@ -11,7 +12,7 @@ class SortingVisualizer extends Component {
         this.state = {
             // Array to be sorted
             array: [],
-            highlightedIndices: [], 
+            swapIndices: [], 
             sorting: false,
         };
     }
@@ -32,20 +33,29 @@ class SortingVisualizer extends Component {
     }
 
 
-    async bubbleSort(){   
-        const sortedArray = await sortingAlgorithms.bubbleSort([...this.state.array]);
-        for(let i = 0; i < sortedArray.length; i++){
-            setTimeout(() => {
-                this.setState({array: sortedArray.slice(0, i + 1)});
-            }, i * 100);
-        }
+    bubbleSort(){   
+        const animations = sortingAlgorithms.bubbleSort([...this.state.array]);
+        let i = 0;
+        const sortingInterval = setInterval(() => {
+            if(i >= animations.length){
+                clearInterval(sortingInterval);
+                return;
+            }
+
+            const [firstIdx, secondIdx] = animations[i];
+            const newArray = [...this.state.array];
+            const temp = newArray[firstIdx];
+            newArray[firstIdx] = newArray[secondIdx];
+            newArray[secondIdx] = temp;
+
+            this.setState({array: newArray, swapIndices: [firstIdx, secondIdx]})
+            i++;
+        }, ANIMATION_SPEED);
+
+       
 
         const javascriptSortedArray = this.state.array.slice().sort((a, b) => a - b);
         // const sortedArray = sortingAlgorithms.bubbleSort(this.state.array);
-
-
-
-
         // console.log(arraysAreEqual(javascriptSortedArray, sortedArray));
     }
 
@@ -63,13 +73,13 @@ class SortingVisualizer extends Component {
     }   
 
     render(){
-        const { array } = this.state;
+        const { array, swapIndices } = this.state;
 
         return (
             <div className="array-container">
                 {array.map((values, idx) => (
                     <div 
-                    className="array-bar" 
+                    className={`array-bar ${swapIndices.includes(idx) ? "highlighted" : ""}`}
                     key={idx}
                     style={{height: `${values}px`}}></div>
             ))}
@@ -96,18 +106,6 @@ function arraysAreEqual (arrayOne, arrayTwo) {
     
     return true;
 }
-
-function swap(array, a, b){
-    return [array[a], array[b]] =[array[b], array[a]]
-}
-
-const Wait =(t,f) => new Promise(() => setTimeout(f,t))
-
-async function Test(){
-     Wait(1000, ()=> console.log("Test ran"))
-}
-
-Test()
 
 export default SortingVisualizer;
 

@@ -8,12 +8,12 @@
     display: inline-block;
     margin: 0 1.5px;
 } 
-/*
+
 .highlighted {
     background-color: yellow;
-    transition: background-color 0.15s step-end;
+    transition: background-color 0.5s;
 }
-
+/*
 .disabled {
     pointer-events: none;
     opacity: 0.5;
