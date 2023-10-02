@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import './SortingVisualizer.css';
-import { bubbleSort } from '../Algorithms/bubbleSort';
+import { getBubbleSortAnimations } from '../Algorithms/bubbleSort';
 import { quickSort } from "../Algorithms/quickSort";
 
 
 const NUMBER_OF_ARRAY_BARS = 100;
-const ANIMATION_SPEED = 50;
+const ANIMATION_SPEED = 1;
 
 class SortingVisualizer extends Component {
     constructor(props){
@@ -15,6 +15,8 @@ class SortingVisualizer extends Component {
             array: [],
             swapIndices: [], 
             sorting: false,
+            primaryColor: "aqua",
+            secondaryColor: "red"
         };
     }
 
@@ -34,29 +36,48 @@ class SortingVisualizer extends Component {
     }
 
 
-    async bubbleSort(){
-        // const animations = bubbleSort([...this.state.array]);
-        // this.setState({sorting: true});  
-        // let i = 0;
-        // const animateSort = () => {
-        //     if(i >= animations.length){
-        //         this.setState({sorting: false, array: animations[animations.length - 1]});
-        //         return;
-        //     }
-
-        //     const [firstIdx, secondIdx] = animations[i];
-        //     const newArray = [...this.state.array];
-        //     const temp = newArray[firstIdx];
-        //     newArray[firstIdx] = newArray[secondIdx];
-        //     newArray[secondIdx] = temp;
-
-        //     this.setState({array: newArray, swapIndices: [firstIdx, secondIdx]})
-        //     i++;
-        //     setTimeout(animateSort, ANIMATION_SPEED);
-        // };
-
-        // animateSort();
+    bubbleSort() {
+        let animations = getBubbleSortAnimations([...this.state.array]);
+    
+        for (let i = 0; i < animations.length; i++) {
+            const isColorChange =
+                animations[i][0] === "comparison1" ||
+                animations[i][0] === "comparison2";
+    
+            const arrayBars = document.getElementsByClassName("array-bar");
+    
+            if (isColorChange) {
+                const color =
+                    animations[i][0] === "comparison1"
+                        ? this.secondaryColor
+                        : this.primaryColor;
+                const [, barOneIdx, barTwoIdx] = animations[i];
+    
+                if (arrayBars[barOneIdx] && arrayBars[barTwoIdx]) {
+                    const barOneStyle = arrayBars[barOneIdx].style;
+                    const barTwoStyle = arrayBars[barTwoIdx].style;
+    
+                    setTimeout(() => {
+                        barOneStyle.backgroundColor = color;
+                        barTwoStyle.backgroundColor = color;
+                    }, i * ANIMATION_SPEED);
+                }
+            } else {
+                const [, barIdx, newHeight] = animations[i];
+    
+                if (barIdx === -1 || !arrayBars[barIdx]) {
+                    continue;
+                }
+    
+                const barStyle = arrayBars[barIdx].style;
+    
+                setTimeout(() => {
+                    barStyle.height = `${newHeight}px`;
+                }, i * ANIMATION_SPEED);
+            }
+        }
     }
+    
 
     quickSort(){
 
@@ -78,13 +99,13 @@ class SortingVisualizer extends Component {
     }   
 
     render(){
-        const { array, swapIndices, sorting } = this.state;
+        const { array, sorting } = this.state;
 
         return (
             <div className="array-container">
                 {array.map((values, idx) => (
                     <div 
-                    className={`array-bar ${swapIndices.includes(idx) ? "highlighted" : ""}`}
+                    className= "array-bar"
                     key={idx}
                     style={{height: `${values}px`}}></div>
             ))}
@@ -114,6 +135,7 @@ function arraysAreEqual (arrayOne, arrayTwo) {
     
     return true;
 }
+
 
 export default SortingVisualizer;
 

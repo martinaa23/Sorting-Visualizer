@@ -4,15 +4,12 @@
 }
 .array-bar{ 
     width: 8px;
-    background-color: red;
+    background-color: aqua;
     display: inline-block;
     margin: 0 1.5px;
 } 
 
-.highlighted {
-    background-color: yellow;
-    transition: background-color 0.5s;
-}
+
 
 .disabled {
     pointer-events: none;
