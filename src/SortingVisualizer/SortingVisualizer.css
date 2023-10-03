@@ -1,15 +1,13 @@
 .array-container{
-    margin: 0 auto;
-    
+    margin: 0 auto;    
 }
+
 .array-bar{ 
     width: 8px;
     background-color: aqua;
     display: inline-block;
     margin: 0 1.5px;
 } 
-
-
 
 .disabled {
     pointer-events: none;

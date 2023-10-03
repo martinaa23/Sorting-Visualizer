@@ -5,7 +5,7 @@ import { quickSort } from "../Algorithms/quickSort";
 
 
 const NUMBER_OF_ARRAY_BARS = 100;
-const ANIMATION_SPEED = 1;
+const ANIMATION_SPEED = 5;
 
 class SortingVisualizer extends Component {
     constructor(props){
@@ -37,40 +37,36 @@ class SortingVisualizer extends Component {
 
 
     bubbleSort() {
-        let animations = getBubbleSortAnimations([...this.state.array]);
-    
+        let animations = getBubbleSortAnimations(this.state.array);
         for (let i = 0; i < animations.length; i++) {
             const isColorChange =
                 animations[i][0] === "comparison1" ||
                 animations[i][0] === "comparison2";
-    
+            
             const arrayBars = document.getElementsByClassName("array-bar");
-    
             if (isColorChange) {
                 const color =
-                    animations[i][0] === "comparison1"
-                        ? this.secondaryColor
-                        : this.primaryColor;
+                animations[i][0] === "comparison1"
+                ? this.state.secondaryColor
+                : this.state.primaryColor;
+
                 const [, barOneIdx, barTwoIdx] = animations[i];
-    
-                if (arrayBars[barOneIdx] && arrayBars[barTwoIdx]) {
-                    const barOneStyle = arrayBars[barOneIdx].style;
-                    const barTwoStyle = arrayBars[barTwoIdx].style;
-    
-                    setTimeout(() => {
-                        barOneStyle.backgroundColor = color;
-                        barTwoStyle.backgroundColor = color;
-                    }, i * ANIMATION_SPEED);
-                }
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANIMATION_SPEED);
             } else {
                 const [, barIdx, newHeight] = animations[i];
     
-                if (barIdx === -1 || !arrayBars[barIdx]) {
+                if (barIdx === -1 ) {
                     continue;
                 }
     
                 const barStyle = arrayBars[barIdx].style;
-    
+                barStyle.backgroundColor = "purple";
                 setTimeout(() => {
                     barStyle.height = `${newHeight}px`;
                 }, i * ANIMATION_SPEED);
@@ -105,14 +101,15 @@ class SortingVisualizer extends Component {
             <div className="array-container">
                 {array.map((values, idx) => (
                     <div 
-                    className= "array-bar"
+                    className="array-bar"
                     key={idx}
-                    style={{height: `${values}px`}}></div>
+                    style={{height: `${values}px`}}>
+                    </div>
             ))}
                 <div className={`button-container ${sorting ? 'disabled' : ''}`}>
                 <button onClick={() => this.resetArray()}>Generate New Array</button>
                 <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-                <button onclick={() => this.quickSort()}>Quick Sort</button>
+                <button onClick={() => this.quickSort()}>Quick Sort</button>
                 <button onClick={() => this.testSortingAlgorithms()}>Test Sorting Algorithms</button>
                 </div>
             </div>

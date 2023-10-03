@@ -5,7 +5,6 @@ export function getBubbleSortAnimations(array){
     return animations;
 }
 
-
 // bubble sort helper function
 function bubbleSort(arrayCopy, animations){
     const arrayLength = arrayCopy.length;
@@ -13,9 +12,9 @@ function bubbleSort(arrayCopy, animations){
     let x = arrayLength - 1;
     while(x > 0){
         let swapped = false;
-        for(let i = 0; i < arrayLength; i++){
-            animations.push(["comparison1" [i, i + 1]]);
-            animations.push(["comparison2" [i, i + 1]]);
+        for(let i = 0; i < x; ++i){
+            animations.push(["comparison1", i, i + 1]);
+            animations.push(["comparison2", i, i + 1]);
             if(arrayCopy[i] > arrayCopy[i + 1]){
                 swapped = true;
                 animations.push(["swap", i, arrayCopy[i + 1]]);
@@ -26,9 +25,7 @@ function bubbleSort(arrayCopy, animations){
         if(!swapped) break;
         x--;
     }
-
 }
-
 
 // Swap helper function
 function swap(array, idxOne, idxTwo){
