@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import './SortingVisualizer.css';
 import { getBubbleSortAnimations } from '../Algorithms/bubbleSort';
 import { quickSort } from "../Algorithms/quickSort";
+import { mergeSort } from "../Algorithms/mergeSort";
 
 
 const NUMBER_OF_ARRAY_BARS = 100;
@@ -37,6 +38,10 @@ class SortingVisualizer extends Component {
 
 
     bubbleSort() {
+        // Set sorting state to true to disable the buttons while sorting
+        this.setState({sorting: true});
+        
+        // Sort the array with bubble sort
         let animations = getBubbleSortAnimations(this.state.array);
         for (let i = 0; i < animations.length; i++) {
             const isColorChange =
@@ -45,6 +50,7 @@ class SortingVisualizer extends Component {
             
             const arrayBars = document.getElementsByClassName("array-bar");
             if (isColorChange) {
+                // Determine the color based on the comparison 
                 const color =
                 animations[i][0] === "comparison1"
                 ? this.state.secondaryColor
@@ -72,29 +78,37 @@ class SortingVisualizer extends Component {
                 }, i * ANIMATION_SPEED);
             }
         }
+        this.setState({sorting: false});
     }
     
 
     quickSort(){
+    }
 
+    mergeSort(){
     }
 
 
     testSortingAlgorithms(){
+        // Generate 100 arrays with a random length between 1 and 1000
         for(let i = 0; i < 100; i++){
             const array = [];
             const length = randomIntFromInterval(1, 1000);
+            // Populate the array with random values between -1000 and 1000
             for(let j = 0; j < length; j++){
                 array.push(randomIntFromInterval(-1000, 1000));
             }
+            // Sort the array using defined sorting method and compare it to built in js sort
+            const sortedArray = mergeSort([...array]);
             const javascriptSortedArray = array.slice().sort((a, b) => a - b);
-            const sortedArray = quickSort([...array]);
 
             console.log(arraysAreEqual(javascriptSortedArray, sortedArray));
         }
     }   
 
+    // Render the array as well as buttons
     render(){
+        // Get the current state of array, sorting
         const { array, sorting } = this.state;
 
         return (
@@ -106,10 +120,12 @@ class SortingVisualizer extends Component {
                     style={{height: `${values}px`}}>
                     </div>
             ))}
+
                 <div className={`button-container ${sorting ? 'disabled' : ''}`}>
                 <button onClick={() => this.resetArray()}>Generate New Array</button>
                 <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
                 <button onClick={() => this.quickSort()}>Quick Sort</button>
+                <button onClick={() => this.mergeSort()}>Merge Sort</button>
                 <button onClick={() => this.testSortingAlgorithms()}>Test Sorting Algorithms</button>
                 </div>
             </div>
@@ -129,7 +145,7 @@ function arraysAreEqual (arrayOne, arrayTwo) {
     for (let i = 0; i < arrayOne.length; i++) {
         if (arrayOne[i] !== arrayTwo[i]) return false;
     }
-    
+
     return true;
 }
 
