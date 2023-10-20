@@ -1,13 +1,24 @@
 .array-container{
+    position: relative; 
+    top: 100px;
     margin: 0 auto;    
+    min-height: 800px;
 }
 
 .array-bar{ 
+    position: relative;
+    transition: ease-in;
+    top: 20px;
     width: 8px;
     background-color: aqua;
     display: inline-block;
     margin: 0 1.5px;
 } 
+
+.button-container{
+    position: relative;
+    top: 20px;
+}
 
 .disabled {
     pointer-events: none;

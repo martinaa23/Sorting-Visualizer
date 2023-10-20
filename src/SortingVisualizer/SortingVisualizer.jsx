@@ -6,7 +6,7 @@ import { mergeSort } from "../Algorithms/mergeSort";
 
 
 const NUMBER_OF_ARRAY_BARS = 100;
-const ANIMATION_SPEED = 5;
+const ANIMATION_SPEED = 3;
 
 class SortingVisualizer extends Component {
     constructor(props){
@@ -26,7 +26,7 @@ class SortingVisualizer extends Component {
         this.resetArray();
         
     }
-
+    
     resetArray(){
         const array = []
         for(let i = 0; i < NUMBER_OF_ARRAY_BARS; i++){
@@ -83,9 +83,15 @@ class SortingVisualizer extends Component {
     
 
     quickSort(){
+        this.state({sorting: true})
+        // Quick sort animation logic here
+        this.state({sorting: false})
     }
 
     mergeSort(){
+        this.state({sorting: true})
+        // Merge sort animation logic here
+        this.state({sorting: false})
     }
 
 
