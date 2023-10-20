@@ -1,30 +1,62 @@
-export const mergeSort = (array) =>{
-    // Base case  
-    if(array.length <= 1) return array;
+export function getMergeSortAnimations(array){
+    if (array.length <=  1) return array;
+    
+    const animations = []
+    const arrayCopy = array.slice();
+    const startIdx = 0;
+    const endIdx = array.length - 1
 
     
-    let middle = Math.floor(array.length / 2);
-    
-    // recursive calls
-    let left = mergeSort(array.slice(0, middle));
-    let right = mergeSort(array.slice(middle));
+    mergeSort(array, startIdx, endIdx, arrayCopy, animations);
 
-    return merge(left, right);
+
+    return animations;
 }
 
-function merge(left, right){
-    // Initialized the array to hold the sorted items
-    let sortedArray = [];
+function mergeSort(mainArray, startIdx, endIdx, arrayCopy, animations){
+    if(startIdx === endIdx) return;
 
-    while(left.length && right.length){
-        // Insert the smallest item into sortedArray
-        if(left[0] < right[0]){
-            sortedArray.push(left.shift())
+    const middleIdx = Math.floor((startIdx + endIdx) / 2);
+    
+    mergeSort(arrayCopy, startIdx, middleIdx, mainArray, animations);
+    mergeSort(arrayCopy, middleIdx + 1, endIdx, mainArray, animations);
+    merge(mainArray, startIdx, middleIdx, endIdx, arrayCopy, animations);
+
+}
+
+function merge(mainArray, startIdx, middleIdx, endIdx, arrayCopy, animations){
+    let k = startIdx
+    let i = startIdx
+    let j = middleIdx + 1;
+
+    while(i <= middleIdx && j <= endIdx){
+        animations.push([i, j]);
+        animations.push([i, j]);
+
+        if(arrayCopy[i] <= arrayCopy[j]){
+            animations.push([k, arrayCopy[i]]);
+            mainArray[k++] = arrayCopy[j++];
         }else{
-            sortedArray.push(right.shift())
+            animations.push([k, arrayCopy[j]]);
+            mainArray[k++] = arrayCopy[j++];
         }
+
+    }
+    while(i <= middleIdx){
+        animations.push([i, i]);    
+        animations.push([i, i]);    
+        animations.push([k, arrayCopy[i]]);
+        
+        mainArray[k++] = arrayCopy[i++];    
+    
     }
 
-    // Using the spread operators create a new array by combining all three arrays
-    return [...sortedArray, ...left, ...right];
+    while(j <= endIdx){
+        animations.push([j, j]);    
+        animations.push([j, j]);    
+        animations.push([k, arrayCopy[j]]);
+        
+        mainArray[k++] = arrayCopy[j++];    
+    
+    }
 }
