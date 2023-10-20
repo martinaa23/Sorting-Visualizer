@@ -17,7 +17,8 @@ class SortingVisualizer extends Component {
             swapIndices: [], 
             sorting: false,
             primaryColor: "aqua",
-            secondaryColor: "red"
+            secondaryColor: "red",
+            barStyles: []
         };
     }
 
@@ -29,11 +30,13 @@ class SortingVisualizer extends Component {
     
     resetArray(){
         const array = []
+        const barStyles = [];
         for(let i = 0; i < NUMBER_OF_ARRAY_BARS; i++){
             // Generate random values 
             array.push(randomIntFromInterval(5, 730)); 
+            barStyles.push({height: `${array[i]}px`, backgroundColor: this.state.primaryColor});
         }
-        this.setState({array})
+        this.setState({array, barStyles})
     }
 
 
@@ -42,43 +45,35 @@ class SortingVisualizer extends Component {
         this.setState({sorting: true});
         
         // Sort the array with bubble sort
-        let animations = getBubbleSortAnimations(this.state.array);
-        for (let i = 0; i < animations.length; i++) {
-            const isColorChange =
-                animations[i][0] === "comparison1" ||
-                animations[i][0] === "comparison2";
-            
-            const arrayBars = document.getElementsByClassName("array-bar");
-            if (isColorChange) {
-                // Determine the color based on the comparison 
-                const color =
-                animations[i][0] === "comparison1"
-                ? this.state.secondaryColor
-                : this.state.primaryColor;
+        const animations = getBubbleSortAnimations(this.state.array);
+        let animationIdx = 0;
 
-                const [, barOneIdx, barTwoIdx] = animations[i];
-                const barOneStyle = arrayBars[barOneIdx].style;
-                const barTwoStyle = arrayBars[barTwoIdx].style;
+        const animate = () => {
+            if (animationIdx < animations.length){
+                const [action, barIdx1, barIdx2] = animations[animationIdx];
+                const isColorChange = action === "comparison1" || action === "comparison2";
 
-                setTimeout(() => {
-                    barOneStyle.backgroundColor = color;
-                    barTwoStyle.backgroundColor = color;
-                }, i * ANIMATION_SPEED);
-            } else {
-                const [, barIdx, newHeight] = animations[i];
-    
-                if (barIdx === -1 ) {
-                    continue;
+                const newBarStyles = [...this.state.barStyles];
+
+                if (isColorChange){
+                    const color = action === "comparison1" ? this.state.secondaryColor : this.state.primaryColor;
+                    
+                    newBarStyles[barIdx1] = {...newBarStyles[barIdx1], backgroundColor : color};
+                    newBarStyles[barIdx2] = {...newBarStyles[barIdx2], backgroundColor : color};
+
+                } else {
+                    const newHeight = animations[animationIdx][2];
+                    newBarStyles[barIdx1] = {...newBarStyles[barIdx1], height: `${newHeight}px`};
                 }
-    
-                const barStyle = arrayBars[barIdx].style;
-                barStyle.backgroundColor = "purple";
-                setTimeout(() => {
-                    barStyle.height = `${newHeight}px`;
-                }, i * ANIMATION_SPEED);
+                this.setState({barStyles: newBarStyles});
+                animationIdx++;
+                setTimeout(animate, ANIMATION_SPEED);
+            } else {
+                this.setState({sorting: false});
             }
-        }
-        this.setState({sorting: false});
+        };
+
+        animate();
     }
     
 
@@ -115,15 +110,15 @@ class SortingVisualizer extends Component {
     // Render the array as well as buttons
     render(){
         // Get the current state of array, sorting
-        const { array, sorting } = this.state;
+        const { array, sorting, barStyles } = this.state;
 
         return (
             <div className="array-container">
-                {array.map((values, idx) => (
+                {array.map((value, idx) => (
                     <div 
                     className="array-bar"
                     key={idx}
-                    style={{height: `${values}px`}}>
+                    style={barStyles[idx]}>
                     </div>
             ))}
 
